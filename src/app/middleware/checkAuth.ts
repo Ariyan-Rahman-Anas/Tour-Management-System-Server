@@ -16,6 +16,7 @@ export const checkAuthorization = (...authRoles: string[]) => async (req: Reques
         if (!authRoles.includes(verifiedToken.role)) {
             throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized!")
         }
+        req.user = verifiedToken
         next()
     } catch (error) {
         next(error)

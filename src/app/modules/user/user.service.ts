@@ -28,7 +28,7 @@ const createUser = async (payload: Partial<UserI>) => {
 }
 
 
-const updateUser = async (userId:string, decodedToken:JwtPayload, payload:Partial<UserI>) => {
+const updateUser = async (userId: string, decodedToken: JwtPayload, payload: Partial<UserI>) => {
 
     const isUserExist = await UserModel.findById(userId)
     if (!isUserExist) {
