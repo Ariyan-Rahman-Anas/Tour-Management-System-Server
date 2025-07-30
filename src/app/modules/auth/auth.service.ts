@@ -14,6 +14,16 @@ const credentialsLogin = async (payload: Partial<UserI>) => {
         throw new AppError(httpStatus.BAD_REQUEST, "User does not exist!")
     }
 
+    // Add this check before bcrypt.compare
+    if (!password) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Password is required!")
+    }
+    
+    // Check if user has a password (wasn't created via social auth)
+    if (!isUserExist.password) {
+        throw new AppError(httpStatus.BAD_REQUEST, "This account was created using social login. Please use social authentication or reset your password.")
+    }
+
     const isCorrectPassword = await bcrypt.compare(password as string, isUserExist.password as string)
     if (!isCorrectPassword) {
         throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password!")
