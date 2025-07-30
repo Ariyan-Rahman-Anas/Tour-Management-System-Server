@@ -9,7 +9,7 @@ const authProviderSchema = new Schema<AuthProviderI>({
 const userSchema = new Schema<UserI>({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String },
+    password: { type: String, },
     role: { type: String, enum: Object.values(Role), default: Role.USER },
     phone: { type: String },
     image: { type: String },
