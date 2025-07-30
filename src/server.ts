@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-import {Server} from "http"
+import { Server } from "http"
 import mongoose from "mongoose"
 import app from "./app"
 import { envVars } from "./app/config/env"
+import { seedSuperAdmin } from "./app/utils/seedSuperAdmin"
 
 let server: Server
 
@@ -17,13 +18,16 @@ const startServer = async () => {
         console.log("Error from server file: ", error)
     }
 }
-startServer()
 
+(async () => {
+    await startServer()
+    await seedSuperAdmin()
+})()
 
 process.on("SIGTERM", (err) => {
     console.log("Sigterm signal received, server is shutting down.", err)
     if (server) {
-        server.close(() => { 
+        server.close(() => {
             process.exit(1)
         })
     }
@@ -34,7 +38,7 @@ process.on("SIGTERM", (err) => {
 process.on("SIGINT", (err) => {
     console.log("SigInt signal received, server is shutting down.", err)
     if (server) {
-        server.close(() => { 
+        server.close(() => {
             process.exit(1)
         })
     }
@@ -45,7 +49,7 @@ process.on("SIGINT", (err) => {
 process.on("unhandledRejection", (err) => {
     console.log("Unhandled rejection detected, server is shutting down.", err)
     if (server) {
-        server.close(() => { 
+        server.close(() => {
             process.exit(1)
         })
     }
@@ -55,7 +59,7 @@ process.on("unhandledRejection", (err) => {
 process.on("uncaughtException", (err) => {
     console.log("Unhandled expectation detected, server is shutting down.", err)
     if (server) {
-        server.close(() => { 
+        server.close(() => {
             process.exit(1)
         })
     }
