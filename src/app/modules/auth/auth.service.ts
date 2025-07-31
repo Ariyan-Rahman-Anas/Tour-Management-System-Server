@@ -1,10 +1,10 @@
 import AppError from "../../errorHelpers/appError"
-import { UserI } from "../user/user.interface"
 import { UserModel } from "../user/user.model"
 import httpStatus from "http-status-codes"
 import bcrypt from "bcryptjs"
-import { envVars } from "../../config/env"
-import { generateToken } from "../../utils/jwtHelper"
+import { createNewAccessTokenUsingRefreshToken, tokenProvider } from "../../utils/tokenProvider"
+import { UserI } from "../user/user.interface"
+
 
 const credentialsLogin = async (payload: Partial<UserI>) => {
     const { email, password } = payload
@@ -29,23 +29,51 @@ const credentialsLogin = async (payload: Partial<UserI>) => {
         throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password!")
     }
 
-    const jwtPayload = {
-        userId: isUserExist._id,
-        email: isUserExist.email,
-        role: isUserExist.role
-    }
-
-    const accessToken = generateToken(jwtPayload, envVars.JWT_SECRET, envVars.ACCESS_TOKEN_EXPIRY)
+    const tokens = tokenProvider(isUserExist)
 
     // Remove password before returning
     const userObject = isUserExist.toObject()
     delete userObject.password
     return {
         user: userObject,
-        accessToken
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken 
     }
 }
 
+
+
+const getNewAccessToken = async (refreshToken: string) => {
+    // const verifiedRefreshToken = verifyToken(refreshToken, envVars.REFRESH_TOKEN_SECRET) as JwtPayload
+
+    // const isUserExist = await UserModel.findOne({ email: verifiedRefreshToken.email })
+    
+    // if (!isUserExist) {
+    //     throw new AppError(httpStatus.BAD_REQUEST, "User does not exist!")
+    // }
+
+    // if (isUserExist.isActive === IsActive.BLOCKED || isUserExist.isActive === IsActive.INACTIVE){
+    //     throw new AppError(httpStatus.BAD_REQUEST, `Account ${isUserExist.isActive}!`)
+    // }
+
+    // if (isUserExist.isDeleted){
+    //     throw new AppError(httpStatus.BAD_REQUEST, "Account Deleted!")
+    // }
+
+    // const tokens = tokenProvider(isUserExist)
+
+    // Remove password before returning
+    // const userObject = isUserExist.toObject()
+    // delete userObject.password
+    console.log(createNewAccessTokenUsingRefreshToken(refreshToken))
+    return {
+        accessToken: createNewAccessTokenUsingRefreshToken(refreshToken),
+    }
+}
+
+
+
 export const AuthService = {
-    credentialsLogin
+    credentialsLogin,
+    getNewAccessToken
 }

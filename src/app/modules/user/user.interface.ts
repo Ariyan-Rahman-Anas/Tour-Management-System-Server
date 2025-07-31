@@ -19,6 +19,7 @@ export interface AuthProviderI {
 }
 
 export interface UserI {
+    _id?: Types.ObjectId
     name: string
     email: string
     password?: string

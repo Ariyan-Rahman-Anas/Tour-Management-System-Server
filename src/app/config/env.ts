@@ -5,15 +5,28 @@ interface EnvConfigI {
     PORT: string
     DB_URI: string
     NODE_ENV: "development" | "production",
-    JWT_SECRET: string
+    ACCESS_TOKEN_SECRET: string
     ACCESS_TOKEN_EXPIRY: string
     HASHING_SALT: string
     SUPER_ADMIN_EMAIL: string
     SUPER_ADMIN_PASSWORD: string
+    REFRESH_TOKEN_SECRET: string
+    REFRESH_TOKEN_EXPIRY: string
 }
 
 const loadEnvVariables = (): EnvConfigI => {
-    const requiredEnvVariables: string[] = ["PORT", "DB_URI", "NODE_ENV", "JWT_SECRET", "ACCESS_TOKEN_EXPIRY", "HASHING_SALT", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD"]
+    const requiredEnvVariables: string[] = [
+        "PORT",
+        "DB_URI",
+        "NODE_ENV",
+        "ACCESS_TOKEN_SECRET",
+        "ACCESS_TOKEN_EXPIRY",
+        "REFRESH_TOKEN_SECRET",
+        "REFRESH_TOKEN_EXPIRY",
+        "HASHING_SALT",
+        "SUPER_ADMIN_EMAIL",
+        "SUPER_ADMIN_PASSWORD"
+    ]
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
             throw new Error(`Missing required env variable: ${key}`)
@@ -24,8 +37,10 @@ const loadEnvVariables = (): EnvConfigI => {
         PORT: process.env.PORT as string,
         DB_URI: process.env.DB_URI as string,
         NODE_ENV: process.env.NODE_ENV as "development" | "production",
-        JWT_SECRET: process.env.JWT_SECRET as string,
+        ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET as string,
         ACCESS_TOKEN_EXPIRY: process.env.ACCESS_TOKEN_EXPIRY as string,
+        REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
+        REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY as string,
         HASHING_SALT: process.env.HASHING_SALT as string,
         SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
         SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string

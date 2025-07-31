@@ -1,5 +1,6 @@
 import  express, { Request, Response } from "express"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 import { router } from "./app/routes"
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler"
 import notFound from "./app/middleware/notFound"
@@ -7,6 +8,7 @@ import notFound from "./app/middleware/notFound"
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
 app.use(cors())
 
 app.use("/api/v1", router )

@@ -7,12 +7,12 @@ import { JwtPayload } from "jsonwebtoken";
 
 export const checkAuthorization = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const accessToken = req.headers.authorization
+        const accessToken = req.cookies.accessToken
         if (!accessToken) {
             throw new AppError(httpStatus.FORBIDDEN, "Unauthenticated!")
         }
 
-        const verifiedToken = verifyToken(accessToken, envVars.JWT_SECRET) as JwtPayload
+        const verifiedToken = verifyToken(accessToken, envVars.ACCESS_TOKEN_SECRET) as JwtPayload
         if (!authRoles.includes(verifiedToken.role)) {
             throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized!")
         }
