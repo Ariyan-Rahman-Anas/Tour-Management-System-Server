@@ -4,18 +4,12 @@ import { sendResponse } from "../../utils/sendResponse"
 import httpStatus from "http-status-codes"
 import { AuthService } from "./auth.service"
 import AppError from "../../errorHelpers/appError"
+import { setAuthCookie } from "../../utils/cookieSetter"
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
     const loginInfo = await AuthService.credentialsLogin(req.body)
-    res.cookie("accessToken", loginInfo.accessToken, {
-        httpOnly: true,
-        secure: false
-    })
-    res.cookie("refreshToken", loginInfo.refreshToken, {
-        httpOnly: true,
-        secure: false
-    })
+    setAuthCookie(res, loginInfo)
     
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -33,16 +27,54 @@ const getNewAccessToken = catchAsync(async (req: Request, res: Response, next: N
     }
     const tokenInfo = await AuthService.getNewAccessToken(refreshToken as string)
     
+    setAuthCookie(res, tokenInfo)
+    
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "User Logged In!",
+        message: "New Access Token Retrieved!",
         data:tokenInfo
+    })
+})
+
+
+const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax"
+    })
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax"
+    })
+    
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Logged Out!",
+        data: null
+    })
+})
+
+
+const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const decodedToken = req.user
+    const newPassword = req.body.password
+    
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Logged Out!",
+        data: null
     })
 })
 
 
 export const AuthController = {
     credentialsLogin,
-    getNewAccessToken
+    getNewAccessToken,
+    logout,
+    resetPassword
 }
