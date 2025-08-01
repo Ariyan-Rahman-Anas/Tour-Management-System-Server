@@ -44,30 +44,9 @@ const credentialsLogin = async (payload: Partial<UserI>) => {
 
 
 const getNewAccessToken = async (refreshToken: string) => {
-    // const verifiedRefreshToken = verifyToken(refreshToken, envVars.REFRESH_TOKEN_SECRET) as JwtPayload
-
-    // const isUserExist = await UserModel.findOne({ email: verifiedRefreshToken.email })
-    
-    // if (!isUserExist) {
-    //     throw new AppError(httpStatus.BAD_REQUEST, "User does not exist!")
-    // }
-
-    // if (isUserExist.isActive === IsActive.BLOCKED || isUserExist.isActive === IsActive.INACTIVE){
-    //     throw new AppError(httpStatus.BAD_REQUEST, `Account ${isUserExist.isActive}!`)
-    // }
-
-    // if (isUserExist.isDeleted){
-    //     throw new AppError(httpStatus.BAD_REQUEST, "Account Deleted!")
-    // }
-
-    // const tokens = tokenProvider(isUserExist)
-
-    // Remove password before returning
-    // const userObject = isUserExist.toObject()
-    // delete userObject.password
-    console.log(createNewAccessTokenUsingRefreshToken(refreshToken))
+    const newAccessToken = await createNewAccessTokenUsingRefreshToken(refreshToken)
     return {
-        accessToken: createNewAccessTokenUsingRefreshToken(refreshToken),
+        accessToken: newAccessToken
     }
 }
 
