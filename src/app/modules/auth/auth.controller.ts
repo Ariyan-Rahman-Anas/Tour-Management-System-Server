@@ -60,13 +60,15 @@ const logout = catchAsync(async (req: Request, res: Response, next: NextFunction
 
 
 const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { oldPassword, newPassword } = req.body
     const decodedToken = req.user
-    const newPassword = req.body.password
+
+    await AuthService.resetPassword(oldPassword, newPassword, decodedToken )
     
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Logged Out!",
+        message: "Pass Changed!",
         data: null
     })
 })
