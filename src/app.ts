@@ -7,10 +7,11 @@ import notFound from "./app/middleware/notFound"
 import passport from "passport"
 import "./app/config/passport"
 import expressSession from "express-session"
+import { envVars } from "./app/config/env"
 
 const app = express()
 app.use(expressSession({
-    secret: "Tour-MS-Ex-Session",
+    secret: envVars.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }))

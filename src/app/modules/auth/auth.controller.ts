@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express"
 import { catchAsync } from "../../utils/catchAsync"
 import { sendResponse } from "../../utils/sendResponse"
@@ -79,6 +80,10 @@ const resetPassword = catchAsync(async (req: Request, res: Response, next: NextF
 
 
 const googleCallback = catchAsync(async (req: Request, res: Response, Next: NextFunction) => {
+    let redirectTo = req.query.state ? req.query.state as string : ""
+    if (redirectTo.startsWith("/")) {
+        redirectTo = redirectTo.slice(1)
+    }
     const user = req.user
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, "User not found!")
@@ -87,7 +92,7 @@ const googleCallback = catchAsync(async (req: Request, res: Response, Next: Next
     const tokenInfo = tokenProvider(user)
     setAuthCookie(res, tokenInfo)
 
-    res.redirect(envVars.FRONTEND_URL)
+    res.redirect(`${envVars.FRONTEND_URL}/${redirectTo}`)
 })
 
 
