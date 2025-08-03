@@ -5,6 +5,7 @@ import { router } from "./app/routes"
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler"
 import notFound from "./app/middleware/notFound"
 import passport from "passport"
+import "./app/config/passport"
 import expressSession from "express-session"
 
 const app = express()
