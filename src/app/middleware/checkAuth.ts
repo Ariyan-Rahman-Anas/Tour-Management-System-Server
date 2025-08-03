@@ -34,7 +34,6 @@ export const checkAuthorization = (...authRoles: string[]) => async (req: Reques
             throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized!")
         }
         req.user = verifiedToken
-        console.log(req.user)
         next()
     } catch (error) {
         next(error)
