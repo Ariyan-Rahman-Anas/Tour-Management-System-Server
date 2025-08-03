@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes"
 import { catchAsync } from "../../utils/catchAsync";
 import { UserService } from "./user.service";
 import { sendResponse } from "../../utils/sendResponse";
+import { JwtPayload } from "jsonwebtoken";
 
 
 const createUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +23,7 @@ const UpdateUser = catchAsync(async (req: Request, res: Response, next: NextFunc
     const verifiedToken = req.user
     const payload = req.body
 
-    const user = await UserService.updateUser(userId, verifiedToken, payload)
+    const user = await UserService.updateUser(userId, verifiedToken as JwtPayload, payload)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
