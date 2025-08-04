@@ -16,7 +16,7 @@ const userSchema = new Schema<UserI>({
     address: { type: String },
     isActive: { type: String, enum: Object.values(IsActive), default: IsActive.ACTIVE },
     isVerified: { type: Boolean, default: false },
-    isDeleted: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false},
     auth: [authProviderSchema]
 }, { timestamps: true, versionKey: false })
 

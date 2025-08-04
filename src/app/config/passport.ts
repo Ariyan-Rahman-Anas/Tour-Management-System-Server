@@ -1,10 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as LocalStrategy } from "passport-local";
 import { envVars } from "./env";
 import { UserModel } from "../modules/user/user.model";
 import { Role } from "../modules/user/user.interface";
+import bcrypt from "bcryptjs"
 
+
+// credentials auth
+passport.use(
+    new LocalStrategy(
+        {
+            usernameField: "email",
+            passwordField: "password"
+        },
+        async (email, password, done: any) => {
+            try {
+                const isUserExist = await UserModel.findOne({ email })
+                if (!isUserExist) {
+                    return done("User does not Exist!")
+                }
+
+                if (!isUserExist.password) {
+                    const isGoogleAuthenticatedUser = isUserExist.auth.some(i => i.provider === "google")
+                    if (isGoogleAuthenticatedUser) {
+                        return done(null, false, {
+                            message: "You are authenticated with Google, so now login with google and set an account password if you want to do credentials login. Thanks for your understanding!"
+                        })
+                    } else {
+                        return done(null, false, { message: "No password set for this account!" })
+                    }
+                }
+
+                const isPasswordMatched = await bcrypt.compare(password, isUserExist.password as string)
+                if (!isPasswordMatched) {
+                    return done(null, false, { message: "Incorrect Password!" })
+                }
+                return done(null, isUserExist)
+            } catch (error) {
+                done(error)
+            }
+        }
+    )
+)
+
+
+// google auth
 passport.use(
     new GoogleStrategy(
         {
@@ -16,7 +58,7 @@ passport.use(
             try {
                 const email = profile.emails?.[0].value
                 if (!email) {
-                    return done(null, false, {message: "Email not found"})
+                    return done(null, false, { message: "Email not found" })
                 }
                 let user = await UserModel.findOne({ email })
                 if (!user) {
@@ -28,7 +70,7 @@ passport.use(
                         isVerified: true,
                         auth: [
                             {
-                                provider: "email",
+                                provider: "google",
                                 providerId: profile.id
                             }
                         ]
