@@ -9,19 +9,38 @@ import { setAuthCookie } from "../../utils/cookieSetter"
 import { tokenProvider } from "../../utils/tokenProvider"
 import { envVars } from "../../config/env"
 import { JwtPayload } from "jsonwebtoken"
+import passport from "passport"
 
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-    const loginInfo = await AuthService.credentialsLogin(req.body)
-    setAuthCookie(res, loginInfo)
-    
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "User Logged In!",
-        data:loginInfo
-    })
+    passport.authenticate("local", async (err: any, user: any, info: any) => {
+        if (err) {
+            return next(new AppError(400, err))
+        }
+
+        if (!user) {
+            return next(new AppError(403, info.message))
+        }
+
+        const tokens = tokenProvider(user)
+
+        const userObject = user.toObject()
+        delete userObject.password
+
+        setAuthCookie(res, tokens)
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: "User Logged In!",
+            data: {
+                user: userObject,
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken
+            }
+        })
+    })(req, res, next)
 })
 
 
@@ -31,14 +50,14 @@ const getNewAccessToken = catchAsync(async (req: Request, res: Response, next: N
         throw new AppError(httpStatus.BAD_REQUEST, "Unauthenticated!")
     }
     const tokenInfo = await AuthService.getNewAccessToken(refreshToken as string)
-    
+
     setAuthCookie(res, tokenInfo)
-    
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "New Access Token Retrieved!",
-        data:tokenInfo
+        data: tokenInfo
     })
 })
 
@@ -54,7 +73,7 @@ const logout = catchAsync(async (req: Request, res: Response, next: NextFunction
         secure: false,
         sameSite: "lax"
     })
-    
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -68,8 +87,8 @@ const resetPassword = catchAsync(async (req: Request, res: Response, next: NextF
     const { oldPassword, newPassword } = req.body
     const decodedToken = req.user
 
-    await AuthService.resetPassword(oldPassword, newPassword, decodedToken as JwtPayload )
-    
+    await AuthService.resetPassword(oldPassword, newPassword, decodedToken as JwtPayload)
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
