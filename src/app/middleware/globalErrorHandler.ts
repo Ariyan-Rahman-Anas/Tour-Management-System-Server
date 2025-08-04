@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -16,6 +17,9 @@ export interface ErrorSourcesT {
 
 
 export const globalErrorHandler = ((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (envVars.NODE_ENV === "development") {
+        console.log("Error Showing form Global Error Handler: ", err)
+    }
     
     let statusCode = 500
     let message = `Something went wrong!`
