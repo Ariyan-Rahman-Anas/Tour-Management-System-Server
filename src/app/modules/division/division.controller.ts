@@ -20,10 +20,12 @@ const getAllDivisions = catchAsync(async (req: Request, res: Response, next: Nex
         statusCode: httpStatus.OK,
         success: true,
         message: "All Divisions Retrieved!",
-        data: divisions
+        data: divisions,
+        meta: {
+            total: divisions?.length
+        }
     })
 })
-
 
 
 const updateDivision = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -43,7 +45,7 @@ const deleteDivision = catchAsync(async (req: Request, res: Response, next: Next
         statusCode: httpStatus.OK,
         success: true,
         message: "Division Deleted!",
-        data: division
+        data: division,
     })
 })
 

@@ -8,7 +8,7 @@ import { DivisionCreateSchema, DivisionUpdateSchema } from "./division.validatio
 const router = Router()
 
 router.post("/create", validateRequest(DivisionCreateSchema), checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), DivisionController.createDivision)
-router.get("/all", DivisionController.getAllDivisions)
+router.get("/", DivisionController.getAllDivisions)
 router.patch("/:id", validateRequest(DivisionUpdateSchema), checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), DivisionController.updateDivision)
 router.delete("/:id", checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), DivisionController.deleteDivision)
 

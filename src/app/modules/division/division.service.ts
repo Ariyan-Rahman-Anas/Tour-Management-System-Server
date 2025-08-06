@@ -12,9 +12,7 @@ const createDivision = async (payload: Partial<DivisionI>) => {
 
 const getAllDivisions = async () => {
     const divisions = await DivisionModel.find({})
-    return {
-        divisions
-    }
+    return divisions
 }
 
 
@@ -30,9 +28,7 @@ const updateDivision = async (id: string, payload: Partial<DivisionI>) => {
 
 const deleteDivision = async (id: string) => {
     const division = await DivisionModel.findByIdAndDelete(id)
-    return {
-        division
-    }
+    return division
 }
 
 
