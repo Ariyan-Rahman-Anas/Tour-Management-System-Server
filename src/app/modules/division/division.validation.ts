@@ -15,3 +15,22 @@ export const DivisionCreateSchema = z.object({
         .min(3, { message: "Please enter description" })
         .optional()
 })
+
+
+export const DivisionUpdateSchema = z.object({
+    name: z
+        .string()
+        .min(3, { message: "Please enter division name" })
+        .optional(),
+    slug: z
+        .string()
+        .min(3, { message: "Division slug required" })
+        .optional(),
+    thumbnail: z
+        .string()
+        .min(3, { message: "Please attach the division's thumbnail"})
+        .optional(),
+    description: z.string()
+        .min(3, { message: "Please enter description" })
+        .optional()
+})
