@@ -5,6 +5,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes"
 
 const createDivision = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    console.log("req.body", req.body)
     const division = await DivisionService.createDivision(req.body)
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
@@ -40,12 +41,12 @@ const updateDivision = catchAsync(async (req: Request, res: Response, next: Next
 
 
 const deleteDivision = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const division = await DivisionService.deleteDivision(req.params.id)
+    await DivisionService.deleteDivision(req.params.id)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "Division Deleted!",
-        data: division,
+        data: null,
     })
 })
 
