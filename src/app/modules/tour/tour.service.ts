@@ -35,9 +35,44 @@ const createTour = async (payload: Partial<TourI>) => {
 }
 
 
-const getAllTours = async () => {
-    const tours = await TourModel.find({}).populate("division").populate("tourType")
-    return tours
+const getAllTours = async (query: Record<string, string>) => {
+    const filter =  query
+    const search = query.search || ""
+    const sort = query.sort ?? "-createdAt"
+    const fields = query.fields?.split(",").join(" ") || ""
+    const page = Number(query.page) || 1
+    const limit = Number(query.limit) || 8
+    const skip = (page - 1) * limit
+
+    const excludeFields = ["search", "sort", "fields", "limit", "skip", "page"]
+    for(const field of excludeFields){
+        delete filter[field]
+    }
+
+    const searchableFields = ["title", "location", "description"]
+
+    const tours = await TourModel
+    .find({
+        $or:[
+            ...searchableFields.map(field => ({[field]: {$regex:search, $options:"i"}}))
+        ]
+    })
+    .find(filter)
+    .sort(sort)
+    .select(fields)
+    .limit(limit)
+    .skip(skip)
+    .populate("division")
+    .populate("tourType")
+
+    const total = await TourModel.countDocuments()
+    return {
+        tours,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+    }
 }
 
 

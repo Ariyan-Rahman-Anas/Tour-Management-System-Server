@@ -64,14 +64,17 @@ const createTour = catchAsync(async (req: Request, res: Response, next: NextFunc
 
 
 const getAllTours = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const tours = await TourService.getAllTours()
+    const {tours, total, page, limit, totalPages} = await TourService.getAllTours(req.query as Record<string, string>)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "All Tours Retrieved!",
         data: tours,
         meta: {
-            total: tours?.length
+            total,
+            page,
+            limit,
+            totalPages
         }
     })
 })
