@@ -24,6 +24,8 @@ const tourSchema = new Schema<TourI>({
     minAge:{type:Number},
     division:{type:Schema.Types.ObjectId, ref:"division", required:true},
     tourType:{type:Schema.Types.ObjectId, ref:"tourType", required:true},
+    departure:{type:String},
+    arrival:{type:String},
 }, { versionKey: false, timestamps: true })
 
 

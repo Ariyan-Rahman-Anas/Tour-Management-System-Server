@@ -4,13 +4,10 @@ import { DivisionModel } from "./division.model"
 import httpStatus from "http-status-codes"
 
 const createDivision = async (payload: Partial<DivisionI>) => {
-    // const baseSlug = payload.name?.toLowerCase().split(" ").join("-")
-    // const slug = `${baseSlug}-Division`
     const isDuplicate = await DivisionModel.findOne({ name: payload.name })
     if (isDuplicate) {
         throw new AppError(httpStatus.BAD_REQUEST, "Division already exists with this name!")
     }
-
     const division = await DivisionModel.create(payload)
     return {
         division
@@ -21,6 +18,11 @@ const createDivision = async (payload: Partial<DivisionI>) => {
 const getAllDivisions = async () => {
     const divisions = await DivisionModel.find({})
     return divisions
+}
+
+const getSingleDivisionBySlug = async (slug: string) => {
+    const division = await DivisionModel.findOne({ slug })
+    return division
 }
 
 
@@ -45,6 +47,7 @@ const deleteDivision = async (id: string) => {
 export const DivisionService = {
     createDivision,
     getAllDivisions,
+    getSingleDivisionBySlug,
     updateDivision,
     deleteDivision
 }
