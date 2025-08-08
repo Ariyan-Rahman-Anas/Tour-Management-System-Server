@@ -10,7 +10,6 @@ export const TourTypeUpdateSchema = z.object({
 })
 
 
-
 export const TourCreateZodSchema = z.object({
     title: z.string().min(3, { message: "Tour title must be at least 3 characters long" }),
     description: z.string().min(3, { message: "Tour description must be at least 3 characters long" }).optional(),
@@ -26,8 +25,11 @@ export const TourCreateZodSchema = z.object({
     maxGuest: z.number().min(1, { message: "Tour max guest must be at least 1" }).optional(),
     minAge: z.number().min(1, { message: "Tour min age must be at least 1" }).optional(),
     division: z.string().min(3, { message: "Tour division must be at least 3 characters long" }),
-    tourType: z.string().min(3, { message: "Tour tour type must be at least 3 characters long" })
+    tourType: z.string().min(3, { message: "Tour tour type must be at least 3 characters long" }),
+    departure: z.string().min(3, { message: "Tour departure must be at least 3 characters long" }).optional(),
+    arrival: z.string().min(3, { message: "Tour arrival must be at least 3 characters long" }).optional()
 })
+
 
 export const TourUpdateZodSchema = z.object({
     title: z.string().min(3, { message: "Tour title must be at least 3 characters long" }).optional(),
@@ -44,5 +46,7 @@ export const TourUpdateZodSchema = z.object({
     maxGuest: z.number().min(1, { message: "Tour max guest must be at least 1" }).optional(),
     minAge: z.number().min(1, { message: "Tour min age must be at least 1" }).optional(),
     division: z.string().min(3, { message: "Tour division must be at least 3 characters long" }).optional(),
-    tourType: z.string().min(3, { message: "Tour tour type must be at least 3 characters long" }).optional()
+    tourType: z.string().min(3, { message: "Tour tour type must be at least 3 characters long" }).optional(),
+    departure: z.string().min(3, { message: "Tour departure must be at least 3 characters long" }).optional(),
+    arrival: z.string().min(3, { message: "Tour arrival must be at least 3 characters long" }).optional()
 })

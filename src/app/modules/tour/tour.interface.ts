@@ -21,4 +21,6 @@ export interface TourI{
     minAge?: number
     division: Types.ObjectId
     tourType: Types.ObjectId
+    departure?: string
+    arrival?: string
 }
