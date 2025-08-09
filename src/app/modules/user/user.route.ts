@@ -3,7 +3,7 @@ import { UserController } from "./user.controller";
 import { UserCreateZodSchema, UserUpdateZodSchema } from "./user.validation";
 import { validateRequest } from "../../middleware/validateRequest";
 import { checkAuthorization } from "../../middleware/checkAuth";
-import { Role } from "./user.interface";
+import { Role } from "../../constant";
 
 const router = Router()
 

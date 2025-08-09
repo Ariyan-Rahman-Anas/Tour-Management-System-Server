@@ -1,10 +1,11 @@
 import AppError from "../../errorHelpers/appError"
-import { AuthProviderI, Role, UserI } from "./user.interface"
+import { AuthProviderI, UserI } from "./user.interface"
 import { UserModel } from "./user.model"
 import httpStatus from "http-status-codes"
 import bcrypt from "bcryptjs"
 import { envVars } from "../../config/env"
 import { JwtPayload } from "jsonwebtoken"
+import { Role } from "../../constant"
 
 
 const createUser = async (payload: Partial<UserI>) => {

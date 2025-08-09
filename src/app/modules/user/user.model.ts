@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
-import { AuthProviderI, IsActive, Role, UserI } from "./user.interface";
+import { AuthProviderI, UserI } from "./user.interface";
+import { IsActive, Role } from "../../constant";
 
 const authProviderSchema = new Schema<AuthProviderI>({
     provider: { type: String, required: true },
