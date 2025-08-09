@@ -3,7 +3,7 @@ import { validateRequest } from "../../middleware/validateRequest";
 import { TourCreateZodSchema, TourTypeCreateSchema, TourTypeUpdateSchema, TourUpdateZodSchema } from "./tour.validation";
 import { TourController } from "./tour.controller";
 import { checkAuthorization } from "../../middleware/checkAuth";
-import { Role } from "../user/user.interface";
+import { Role } from "../../constant";
 
 const router = Router()
 

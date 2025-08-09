@@ -1,17 +1,5 @@
 import { Types } from "mongoose"
-
-export enum Role{
-    SUPER_ADMIN = "SUPER_ADMIN",
-    ADMIN = "ADMIN",
-    USER = "USER",
-    GUIDE = "GUIDE"
-}
-
-export enum IsActive {
-    ACTIVE = "ACTIVE",
-    INACTIVE = "INACTIVE",
-    BLOCKED= "BLOCKED"
-}
+import { IsActive, Role } from "../../constant"
 
 export interface AuthProviderI {
     provider: "google" | "credentials"
