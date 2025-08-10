@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { DivisionController } from "./division.controller";
 import { checkAuthorization } from "../../middleware/checkAuth";
-import { Role } from "../user/user.interface";
 import { validateRequest } from "../../middleware/validateRequest";
 import { DivisionCreateSchema, DivisionUpdateSchema } from "./division.validation";
+import { Role } from "../../constant";
 
 const router = Router()
 

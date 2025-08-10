@@ -13,6 +13,8 @@ export enum IsActive {
 
 export const excludeFields = ["search", "sort", "fields", "limit", "skip", "page"]
 export const searchableFields = ["title", "location", "description"]
+// export const bookingsSearchableFields = ["user", "tour", "payment", "guestCount"]
+// export const bookingsSearchableFields = ["guestCount"]
 
 
 export enum BOOKING_STATUS {
