@@ -5,7 +5,7 @@ import { verifyToken } from "../utils/jwtHelper";
 import { envVars } from "../config/env";
 import { JwtPayload } from "jsonwebtoken";
 import { UserModel } from "../modules/user/user.model";
-import { IsActive } from "../modules/user/user.interface";
+import { IsActive } from "../constant";
 
 export const checkAuthorization = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
