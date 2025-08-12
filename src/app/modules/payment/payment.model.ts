@@ -19,7 +19,7 @@ const paymentSchema = new Schema<PaymentI>({
         required: true
     },
     paymentGetWayData: {
-        type: Schema.Types.Mixed``
+        type: Schema.Types.Mixed
     },
     invoiceUrl: {
         type: String
