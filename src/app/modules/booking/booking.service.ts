@@ -3,6 +3,8 @@ import AppError from "../../errorHelpers/appError"
 import { generateUniqueId } from "../../utils/generateUniqueId"
 import { QueryBuilder } from "../../utils/QueryBuilder"
 import { PaymentModel } from "../payment/payment.model"
+import { SSLCommerzII } from "../sslCommerz/sslCommerz.interface"
+import { SSLCommerzService } from "../sslCommerz/sslCommerz.service"
 import { TourModel } from "../tour/tour.model"
 import { UserModel } from "../user/user.model"
 import { BookingI } from "./booking.interface"
@@ -89,10 +91,27 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
             throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to update booking!")
         }
 
+        console.log({createdPayment})
+
+        const sslPayload :SSLCommerzII = {
+            amount: totalAmount,
+            transactionId: createdPayment.transactionId,
+            // transactionId: generateUniqueId("Tx"),
+            name: user.name,
+            email: user.email,
+            phoneNumber: user.phone,
+            address: user.address,
+        }
+
+        const paymentInit = await SSLCommerzService.sslPaymentInit(sslPayload)
+
         await session.commitTransaction()
         session.endSession()
         
-        return updatedBooking
+        return {
+            booking: updatedBooking,
+            paymentUrl: paymentInit?.GatewayPageURL,
+        }
 
     } catch (error) {
         await session.abortTransaction()
@@ -100,8 +119,6 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
         throw error
     }
 }
-
-
 
 
 const getAllBookings = async (query: Record<string, string>) => {
@@ -123,6 +140,7 @@ const getAllBookings = async (query: Record<string, string>) => {
         ...meta
     }
 }
+
 
 export const BookingService = {
     createBooking,
