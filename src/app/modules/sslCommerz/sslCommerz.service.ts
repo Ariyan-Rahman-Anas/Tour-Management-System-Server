@@ -92,9 +92,9 @@ const sslPaymentInit = async (payload: SSLCommerzII) => {
             tran_id: payload.transactionId,
             
             // URLs
-            success_url: `${envVars.SSL.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}`,
-            fail_url: `${envVars.SSL.SSL_FAIL_BACKEND_URL}?transactionId=${payload.transactionId}`, // Add transactionId for tracking
-            cancel_url: `${envVars.SSL.SSL_CANCEL_BACKEND_URL}?transactionId=${payload.transactionId}`, // Add transactionId for tracking
+            success_url: `${envVars.SSL.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=success`,
+            fail_url: `${envVars.SSL.SSL_FAIL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=fail`, // Add transactionId for tracking
+            cancel_url: `${envVars.SSL.SSL_CANCEL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=cancel`, // Add transactionId for tracking
             
             // Product Information
             shipping_method: "N/A",
@@ -103,24 +103,24 @@ const sslPaymentInit = async (payload: SSLCommerzII) => {
             product_profile: "general",
             
             // Customer Information
-            cus_name: payload.name.trim(),
-            cus_email: payload.email.trim(),
-            cus_add1: payload.address.trim(),
-            cus_add2: payload.address.trim(),
-            cus_city: payload.address.trim(),
-            cus_state: payload.address.trim(),
-            cus_postcode: payload.address.trim(),
+            cus_name: payload.name?.trim(),
+            cus_email: payload.email?.trim(),
+            cus_add1: payload.address?.trim(),
+            cus_add2: payload.address?.trim(),
+            cus_city: payload.address?.trim(),
+            cus_state: payload.address?.trim(),
+            cus_postcode: payload.address?.trim(),
             cus_country: "Bangladesh",
-            cus_phone: payload.phoneNumber.trim(),
-            cus_fax: payload.phoneNumber.trim(),
+            cus_phone: payload.phoneNumber?.trim(),
+            cus_fax: payload.phoneNumber?.trim(),
             
             // Shipping Information (Required fields)
-            ship_name: payload.name.trim(),
-            ship_add1: payload.address.trim(),
-            ship_add2: payload.address.trim(),
-            ship_city: payload.address.trim(),
-            ship_state: payload.address.trim(),
-            ship_postcode: payload.address.trim(),
+            ship_name: payload.name?.trim(),
+            ship_add1: payload.address?.trim(),
+            ship_add2: payload.address?.trim(),
+            ship_city: payload.address?.trim(),
+            ship_state: payload.address?.trim(),
+            ship_postcode: payload.address?.trim(),
             ship_country: "Bangladesh",
         }
 
