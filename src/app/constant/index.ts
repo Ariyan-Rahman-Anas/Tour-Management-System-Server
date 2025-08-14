@@ -19,7 +19,7 @@ export const searchableFields = ["title", "location", "description"]
 
 export enum BOOKING_STATUS {
     PENDING = "PENDING",
-    CANCEL = "CANCEL",
+    CANCELED = "CANCELED",
     COMPLETED = "COMPLETED",
     FAILED = "FAILED"
 }

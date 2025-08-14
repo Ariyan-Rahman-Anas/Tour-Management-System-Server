@@ -91,12 +91,9 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
             throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to update booking!")
         }
 
-        console.log({createdPayment})
-
         const sslPayload :SSLCommerzII = {
             amount: totalAmount,
             transactionId: createdPayment.transactionId,
-            // transactionId: generateUniqueId("Tx"),
             name: user.name,
             email: user.email,
             phoneNumber: user.phone,
@@ -140,6 +137,9 @@ const getAllBookings = async (query: Record<string, string>) => {
         ...meta
     }
 }
+
+
+const getMyBookings =async ()=>{}
 
 
 export const BookingService = {
