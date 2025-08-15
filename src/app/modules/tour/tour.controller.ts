@@ -55,29 +55,47 @@ const deleteTourType = catchAsync(async (req: Request, res: Response, next: Next
 
 // === tour type end ===
 
-const createTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Req body", req.body)
-    console.log("Req files", req.files)
-    const images = req.files?.map((file: Express.Multer.File) => file.path)
-    if (!images) {
-        throw new AppError(httpStatus.BAD_REQUEST, "Images are required!")
+// const createTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+//     console.log("Req body", req.body)
+//     console.log("Req files", req.files)
+//     const images = req.files?.map((file: Express.Multer.File) => file.path)
+//     if (!images) {
+//         throw new AppError(httpStatus.BAD_REQUEST, "Images are required!")
+//     }
+//     const tourData = {
+//         ...req.body,
+//         images
+//     }
+//     const tour = await TourService.createTour(tourData)
+//     sendResponse(res, {
+//         statusCode: httpStatus.CREATED,
+//         success: true,
+//         message: "Tour Created!",
+//         data: tour
+//     })
+// })
+
+const createTour = catchAsync(async (req: Request, res: Response) => {
+    if (!req.files || req.files.length === 0) {
+        throw new AppError(httpStatus.BAD_REQUEST, "At least one image is required!");
     }
-    const tourData = {
-        ...req.body,
-        images
-    }
-    const tour = await TourService.createTour(tourData)
+
+    const tour = await TourService.createTour(
+        req.body,
+        req.files as Express.Multer.File[]
+    );
+
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
         success: true,
-        message: "Tour Created!",
+        message: "Tour created successfully",
         data: tour
-    })
-})
+    });
+});
 
 
 const getAllTours = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {tours, total, page, limit, totalPages} = await TourService.getAllTours(req.query as Record<string, string>)
+    const { tours, total, page, limit, totalPages } = await TourService.getAllTours(req.query as Record<string, string>)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -105,15 +123,29 @@ const getSingleTourBySlug = catchAsync(async (req: Request, res: Response, next:
 })
 
 
-const updateTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const tour = await TourService.updateTour(req.params.id, req.body)
+// const updateTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+//     const tour = await TourService.updateTour(req.params.id, req.body)
+//     sendResponse(res, {
+//         statusCode: httpStatus.OK,
+//         success: true,
+//         message: "Tour Updated!",
+//         data: tour
+//     })
+// })
+const updateTour = catchAsync(async (req: Request, res: Response) => {
+    const tour = await TourService.updateTour(
+      req.params.id,
+      req.body,
+      req.files as Express.Multer.File[]
+    );
+    
     sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "Tour Updated!",
-        data: tour
-    })
-})
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Tour updated successfully",
+      data: tour
+    });
+  });  
 
 
 const deleteTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

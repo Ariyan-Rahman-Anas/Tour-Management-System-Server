@@ -1,5 +1,3 @@
-// division.interface.ts
-
 export interface DivisionI {
     name: string
     slug: string

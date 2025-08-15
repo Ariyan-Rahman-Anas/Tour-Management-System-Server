@@ -11,7 +11,10 @@ const tourSchema = new Schema<TourI>({
     title:{type:String, required: true},
     slug:{type:String, unique:true},
     description:{type:String},
-    images:{type:[String], default:[]},
+    images: [{
+        url: { type: String, required: true },
+        public_id: { type: String, required: true }
+      }],
     location:{type: String},
     cost:{type: Number},
     startDate:{type: Date},
