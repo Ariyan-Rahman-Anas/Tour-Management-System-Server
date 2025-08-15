@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Request, Response, Express } from "express"
 import { catchAsync } from "../../utils/catchAsync"
 import { sendResponse } from "../../utils/sendResponse"
 import { TourService } from "./tour.service"
 import httpStatus from "http-status-codes"
+import AppError from "../../errorHelpers/appError"
 
 
 const CreateTourType = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -52,9 +53,20 @@ const deleteTourType = catchAsync(async (req: Request, res: Response, next: Next
     })
 })
 
+// === tour type end ===
 
 const createTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const tour = await TourService.createTour(req.body)
+    console.log("Req body", req.body)
+    console.log("Req files", req.files)
+    const images = req.files?.map((file: Express.Multer.File) => file.path)
+    if (!images) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Images are required!")
+    }
+    const tourData = {
+        ...req.body,
+        images
+    }
+    const tour = await TourService.createTour(tourData)
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
         success: true,

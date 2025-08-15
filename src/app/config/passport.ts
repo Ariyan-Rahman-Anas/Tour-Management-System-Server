@@ -4,8 +4,8 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
 import { envVars } from "./env";
 import { UserModel } from "../modules/user/user.model";
-import { Role } from "../modules/user/user.interface";
 import bcrypt from "bcryptjs"
+import { Role } from "../constant";
 
 
 // credentials auth
