@@ -21,6 +21,7 @@
 // config/cloudinary.config.ts
 import { v2 as cloudinary } from 'cloudinary';
 import { envVars } from './env';
+import { CloudinaryImage } from '../modules/tour/tour.interface';
 
 /**
  * Cloudinary Configuration
@@ -41,7 +42,25 @@ export const cloudinaryUtils = {
   /**
    * Upload file to Cloudinary
    */
-  async uploadFile(file: Express.Multer.File, folder: string) {
+  // async uploadFile(file: Express.Multer.File, folder: string) {
+  //   return new Promise((resolve, reject) => {
+  //     const uploadStream = cloudinary.uploader.upload_stream(
+  //       {
+  //         folder,
+  //         resource_type: 'auto',
+  //         allowed_formats: ['jpg', 'png', 'jpeg', 'gif'],
+  //         transformation: { width: 800, height: 800, crop: 'limit' }
+  //       },
+  //       (error, result) => {
+  //         if (error) return reject(error);
+  //         resolve(result);
+  //       }
+  //     );
+      
+  //     uploadStream.end(file.buffer);
+  //   });
+  // },
+  async uploadFile(file: Express.Multer.File, folder: string): Promise<CloudinaryImage> {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
@@ -51,8 +70,12 @@ export const cloudinaryUtils = {
           transformation: { width: 800, height: 800, crop: 'limit' }
         },
         (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
+          if (error || !result) return reject(error || new Error('Upload failed'));
+          resolve({
+            url: result.secure_url,
+            public_id: result.public_id,
+            // Map other properties you need
+          });
         }
       );
       

@@ -1,30 +1,54 @@
 import { Router } from "express";
 import { validateRequest } from "../../middleware/validateRequest";
-import { TourCreateZodSchema, TourTypeCreateSchema, TourTypeUpdateSchema, TourUpdateZodSchema } from "./tour.validation";
+import { TourTypeCreateSchema, TourTypeUpdateSchema } from "./tour.validation";
 import { TourController } from "./tour.controller";
 import { checkAuthorization } from "../../middleware/checkAuth";
 import { Role } from "../../constant";
-// import { multerUploadCloudinaryMultiple } from "../../config/multer.config";
+import { uploadMultiple } from "../../config/multer.config";
 
 const router = Router()
 
+// tour types
 router.post("/create-tour-type",
     validateRequest(TourTypeCreateSchema),
     checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN),
     TourController.CreateTourType)
-router.get("/tour-types", TourController.getAllTourTypes)
-router.patch("/tour-types/:id", validateRequest(TourTypeUpdateSchema), checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), TourController.updateTourType)
-router.delete("/tour-types/:id", checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), TourController.deleteTourType)
-    
-router.post("/create", 
-    validateRequest(TourCreateZodSchema),
-    // multerUploadCloudinaryMultiple.array("images", 5),
-checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN),
-TourController.createTour)
 
-router.get("/", TourController.getAllTours)
-router.get("/:slug", TourController.getSingleTourBySlug)
-router.patch("/:id", validateRequest(TourUpdateZodSchema), checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), TourController.updateTour)
-router.delete("/:id", checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), TourController.deleteTour)
+router.get("/tour-types", 
+    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
+    TourController.getAllTourTypes)
+
+router.patch("/tour-types/:id",
+    validateRequest(TourTypeUpdateSchema),
+    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN),
+    TourController.updateTourType)
+
+router.delete("/tour-types/:id", 
+    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
+    TourController.deleteTourType)
+
+
+
+// tours
+router.post("/create", 
+    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN),
+    uploadMultiple.array('images', 5),
+    TourController.createTour)
+
+router.get("/", 
+    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
+    TourController.getAllTours)
+
+router.get("/:slug", 
+    TourController.getSingleTourBySlug)
+
+router.patch("/:id", 
+    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
+    uploadMultiple.array('images', 5),
+    TourController.updateTour)
+
+router.delete("/:id", 
+    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
+    TourController.deleteTour)
 
 export const TourRoute = router

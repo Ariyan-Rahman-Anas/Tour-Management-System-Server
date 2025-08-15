@@ -1,5 +1,3 @@
-// division.model.ts
-
 import { model, Schema } from "mongoose";
 import { DivisionI } from "./division.interface";
 
