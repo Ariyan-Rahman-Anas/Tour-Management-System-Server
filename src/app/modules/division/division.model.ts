@@ -1,16 +1,26 @@
+// division.model.ts
+
 import { model, Schema } from "mongoose";
 import { DivisionI } from "./division.interface";
 
 const divisionSchema = new Schema<DivisionI>({
-    name: { type: String,  required: true, unique:true},
-    slug: { type: String, unique:true},
-    thumbnail: {type:String},
-    description: {type:String}
-},{versionKey:false, timestamps:true})
+    name: { type: String, required: true, unique: true },
+    slug: { type: String, unique: true },
+    thumbnail: { 
+        type: String,
+        validate: {
+            validator: function(v: string) {
+                return !v || /^https?:\/\/res\.cloudinary\.com/.test(v)
+            },
+            message: 'Invalid image URL format'
+        }
+    },
+    description: { type: String }
+}, { versionKey: false, timestamps: true }) 
 
 
 divisionSchema.pre("save", async function (next) {
-    if(this.isModified("name")){
+    if (this.isModified("name")) {
         this.slug = this.name.toLowerCase().split(" ").join("-") + "-Division"
     }
     next()
@@ -18,7 +28,7 @@ divisionSchema.pre("save", async function (next) {
 
 divisionSchema.pre("findOneAndUpdate", async function (next) {
     const division = this.getUpdate() as Partial<DivisionI>
-    if(division.name){
+    if (division.name) {
         division.slug = division.name?.toLowerCase().split(" ").join("-") + "-Division"
     }
     this.setUpdate(division)

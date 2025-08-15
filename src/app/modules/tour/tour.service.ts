@@ -32,7 +32,9 @@ const deleteTourType = async (id: string) => {
 
 const createTour = async (payload: Partial<TourI>) => {
     const tour = await TourModel.create(payload)
-    return tour
+    const populatedWithDivision = await tour.populate("division")
+    const populatedWithTourType = await populatedWithDivision.populate("tourType")
+    return populatedWithTourType
 }
 
 
