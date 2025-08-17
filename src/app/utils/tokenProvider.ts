@@ -1,10 +1,11 @@
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../config/env";
-import { IsActive, UserI } from "../modules/user/user.interface";
+import { UserI } from "../modules/user/user.interface";
 import { generateToken, verifyToken } from "./jwtHelper";
 import { UserModel } from "../modules/user/user.model";
 import AppError from "../errorHelpers/appError";
 import httpStatus from "http-status-codes"
+import { IsActive } from "../constant";
 
 export const tokenProvider = (user: Partial<UserI>) => {
     const jwtPayload = {
@@ -44,7 +45,7 @@ export const createNewAccessTokenUsingRefreshToken = async (refreshToken: string
     // return token
 
     const jwtPayload = {
-        userId : isUserExist._id,
+        userId: isUserExist._id,
         email: isUserExist.email,
         role: isUserExist.role
     }

@@ -17,7 +17,7 @@ const createDivision = async (payload: Partial<DivisionI>, file?: Express.Multer
     // Upload thumbnail if provided
     if (file) {
         const result = await cloudinaryUtils.uploadFile(file, FOLDER_NAME);
-        payload.thumbnail = result.secure_url;
+        payload.thumbnail = result?.url
     }
 
     return DivisionModel.create(payload);
@@ -53,7 +53,7 @@ const updateDivision = async (id: string, payload: Partial<DivisionI>, file?: Ex
 
         // Upload new thumbnail
         const result = await cloudinaryUtils.uploadFile(file, FOLDER_NAME);
-        payload.thumbnail = result.secure_url;
+        payload.thumbnail = result?.url;
     }
 
     return DivisionModel.findByIdAndUpdate(id, payload, {
