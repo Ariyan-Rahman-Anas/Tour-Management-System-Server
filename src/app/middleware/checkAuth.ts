@@ -21,11 +21,12 @@ export const checkAuthorization = (...authRoles: string[]) => async (req: Reques
         if (!isUserExist) {
             throw new AppError(httpStatus.BAD_REQUEST, "User does not exist!")
         }
-
+        if(!isUserExist.isVerified){
+            throw new AppError(httpStatus.BAD_REQUEST, "Account Not Verified!")
+        }
         if (isUserExist.isActive === IsActive.BLOCKED || isUserExist.isActive === IsActive.INACTIVE) {
             throw new AppError(httpStatus.BAD_REQUEST, `Account ${isUserExist.isActive}!`)
         }
-
         if (isUserExist.isDeleted) {
             throw new AppError(httpStatus.BAD_REQUEST, "Account Deleted!")
         }

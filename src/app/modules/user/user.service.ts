@@ -11,11 +11,6 @@ import { Role } from "../../constant"
 const createUser = async (payload: Partial<UserI>) => {
     const { email, password, ...rest } = payload
 
-    // const isUserExist = await UserModel.findOne({ email })
-    // if (isUserExist) {
-    //     throw new AppError(httpStatus.BAD_REQUEST, "User already exist!")
-    // }
-
     const hashedPassword = await bcrypt.hash(password as string, Number(envVars.HASHING_SALT) )
 
     const authProvider: AuthProviderI = { provider: "credentials", providerId: email as string }
@@ -26,6 +21,13 @@ const createUser = async (payload: Partial<UserI>) => {
         auth: [authProvider],
         ...rest,
     })
+    return user
+}
+
+
+
+const getLoggedInUser = async (userId: string) => {
+    const user = await UserModel.findById(userId).select("-password")
     return user
 }
 
@@ -69,6 +71,7 @@ const getAllUser = async () => {
 
 export const UserService = {
     createUser,
+    getLoggedInUser,
     updateUser,
     getAllUser
 }

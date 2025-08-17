@@ -99,6 +99,21 @@ const resetPassword = catchAsync(async (req: Request, res: Response, next: NextF
 })
 
 
+const setPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { password } = req.body
+    const decodedToken = req.user as JwtPayload
+
+    await AuthService.setPassword(decodedToken.userId, password)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Password Set!",
+        data: null
+    })
+})
+
+
 const googleCallback = catchAsync(async (req: Request, res: Response, Next: NextFunction) => {
     let redirectTo = req.query.state ? req.query.state as string : ""
     if (redirectTo.startsWith("/")) {
@@ -121,5 +136,6 @@ export const AuthController = {
     getNewAccessToken,
     logout,
     resetPassword,
+    setPassword,
     googleCallback
 }
