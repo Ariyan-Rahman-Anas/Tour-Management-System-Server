@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { envVars } from "../config/env"
-import { AuthProviderI, Role, UserI } from "../modules/user/user.interface"
+import { Role } from "../constant"
+import { AuthProviderI, UserI } from "../modules/user/user.interface"
 import { UserModel } from "../modules/user/user.model"
 import bcrypt from "bcryptjs"
 

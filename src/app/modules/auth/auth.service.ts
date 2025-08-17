@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs"
 import { createNewAccessTokenUsingRefreshToken } from "../../utils/tokenProvider"
 import { envVars } from "../../config/env"
 import { JwtPayload } from "jsonwebtoken"
+import { AuthProviderI } from "../user/user.interface"
 
 
 
@@ -65,7 +66,30 @@ const resetPassword = async (oldPassword: string, newPassword: string, decodedTo
 }
 
 
+
+const setPassword = async (userId: string, password: string) => {
+    if(password.length < 5){
+        throw new AppError(httpStatus.BAD_REQUEST, "Password must be at least 5 characters long!")
+    }
+    const user = await UserModel.findById(userId)
+    if (!user) {
+        throw new AppError(httpStatus.BAD_REQUEST, "User not found!")
+    }
+    if(user.password && user.auth.some(i => i.provider === "google")){
+        throw new AppError(httpStatus.BAD_REQUEST, "You have already set your password. Please use reset password option from the profile page.")
+    }
+    const hashedPassword = await bcrypt.hash(password, Number(envVars.HASHING_SALT))
+    const credentialProvider:AuthProviderI = { provider: "credentials", providerId: user.email }
+    const auths:AuthProviderI[] = [...user.auth, credentialProvider]
+    user.password = hashedPassword
+    user.auth = auths
+    await user.save()
+}
+
+
+
 export const AuthService = {
     getNewAccessToken,
-    resetPassword
+    resetPassword,
+    setPassword
 }

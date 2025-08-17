@@ -9,6 +9,8 @@ const router = Router()
 
 router.post("/register", validateRequest(UserCreateZodSchema), UserController.createUser)
 
+router.get("/me", checkAuthorization(...Object.values(Role)), UserController.getLoggedInUser)
+
 router.patch("/:id", validateRequest(UserUpdateZodSchema), checkAuthorization(...Object.values(Role)), UserController.UpdateUser)
 
 router.get("/all-user", checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), UserController.getAllUser)

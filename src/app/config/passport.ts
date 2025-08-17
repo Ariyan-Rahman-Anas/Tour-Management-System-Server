@@ -6,6 +6,9 @@ import { envVars } from "./env";
 import { UserModel } from "../modules/user/user.model";
 import bcrypt from "bcryptjs"
 import { Role } from "../constant";
+import AppError from "../errorHelpers/appError";
+import httpStatus from "http-status-codes"
+import { IsActive } from "../constant";
 
 
 // credentials auth
@@ -20,6 +23,16 @@ passport.use(
                 const isUserExist = await UserModel.findOne({ email })
                 if (!isUserExist) {
                     return done("User does not Exist!")
+                }
+
+                if (!isUserExist.isVerified) {
+                    return done("Account Not Verified!")
+                }
+                if (isUserExist.isActive === IsActive.BLOCKED || isUserExist.isActive === IsActive.INACTIVE) {
+                    return done(`Account ${isUserExist.isActive}!`)
+                }
+                if (isUserExist.isDeleted) {
+                    return done("Account Deleted!")
                 }
 
                 if (!isUserExist.password) {

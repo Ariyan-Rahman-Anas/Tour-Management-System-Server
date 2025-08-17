@@ -18,6 +18,18 @@ const createUser = catchAsync(async (req: Request, res: Response, next: NextFunc
 })
 
 
+const getLoggedInUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const decodedToken = req.user as JwtPayload
+    const user = await UserService.getLoggedInUser(decodedToken.userId)
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "User Created!",
+        data: user
+    })
+})
+
+
 const UpdateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id
     const verifiedToken = req.user
@@ -48,6 +60,7 @@ const getAllUser = catchAsync(async (req: Request, res: Response, next: NextFunc
 
 export const UserController = {
     createUser,
+    getLoggedInUser,
     UpdateUser,
     getAllUser
 }

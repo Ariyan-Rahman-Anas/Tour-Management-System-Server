@@ -3,6 +3,7 @@ import { AuthController } from "./auth.controller";
 import { checkAuthorization } from "../../middleware/checkAuth";
 import passport from "passport";
 import { Role } from "../../constant";
+import { envVars } from "../../config/env";
 
 const router = Router()
 
@@ -10,12 +11,14 @@ router.post("/login", AuthController.credentialsLogin)
 router.post("/refresh-token", AuthController.getNewAccessToken)
 router.post("/logout", AuthController.logout)
 router.post("/reset-password", checkAuthorization(...Object.values(Role)), AuthController.resetPassword)
+router.post("/set-password", checkAuthorization(...Object.values(Role)), AuthController.setPassword)
+router.post("/forgot-password", AuthController.setPassword)
 
 router.get("/google", async (req: Request, res: Response, next: NextFunction) => {
     const redirect = req.query.redirect ?? "/"
     passport.authenticate("google", {scope:["profile", "email"], state: redirect as string})(req, res, next)
 })
-router.get("/google/callback", passport.authenticate("google", {failureRedirect: "/login"}), AuthController.googleCallback)
+router.get("/google/callback", passport.authenticate("google", {failureRedirect: `${envVars.FRONTEND_URL}/login?error=Google Authentication Failed! Please contact with out support team `}), AuthController.googleCallback)
 
 
 export const AuthRoute = router
