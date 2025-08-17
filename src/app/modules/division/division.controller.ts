@@ -5,6 +5,8 @@ import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
 import AppError from '../../errorHelpers/appError';
 
+
+
 //  Create division with thumbnail
 const createDivision = catchAsync(async (req: Request, res: Response) => {
     if (!req.file) {
