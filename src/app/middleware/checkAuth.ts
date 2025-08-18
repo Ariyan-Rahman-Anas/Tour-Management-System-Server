@@ -9,7 +9,8 @@ import { IsActive } from "../constant";
 
 export const checkAuthorization = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const accessToken = req.cookies.accessToken
+        const accessToken = req.cookies.accessToken ?? req.headers.authorization
+        // const accessToken = req.headers.authorization
         if (!accessToken) {
             throw new AppError(httpStatus.FORBIDDEN, "Unauthenticated!")
         }
