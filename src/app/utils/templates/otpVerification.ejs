@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password</title>
+    <title>OTP Verification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,22 +32,18 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container">
-        <h1>Forgot Password</h1>
-        <h3>Hello <%= name %></h3>
-        <p>We have received a request to reset your password. Click the button below to reset your password (Button is valid for only 10 minutes).</p>
-        <button class="btn">
-        <a href="<%= resetPasswordUrl %>" target="_blank">Reset Password</a>
-        </button>
+        <h1>OTP Verification</h1>
+        <h3>Hello,</h3>
+        <p>We have received a request to verify your OTP. Click the button below to verify your OTP (Button is valid for only 5 minutes).</p>
+        <p>Your OTP is: <b><%= otp %></b> </p>
         <p>
-            <b>If you did not request for password reset, please ignore this email.</b>
+            <b>If you did not request for OTP verification, please ignore this email.</b>
         </p>
     </div>
     <footer>
         <p>© 2025 Tour Management System. All rights reserved.</p>
     </footer>
 </body>
-
 </html>
