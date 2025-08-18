@@ -27,9 +27,6 @@ const previousPaymentInit = async (id: string) => {
     const paymentInit = await SSLCommerzService.sslPaymentInit(sslPayload)
 
     return {
-        // success: true,
-        // message: "Payment Initiated for Previous Booking!",
-        // data: paymentInit,
         paymentUrl: paymentInit?.GatewayPageURL
     }
 }
