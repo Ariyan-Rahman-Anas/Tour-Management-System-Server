@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Invoice</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Booking Invoice</h1>
+        <p>Booking Date: <%= bookingDate %></p>
+        <p>Tour Name: <%= tourName %></p>
+        <p>Number of Guests: <%= guestCount %></p>
+        <p>Total Amount: <%= totalAmount %></p>
+        <p>Transaction ID: <%= transactionId %></p>
+        <p>Hey <b><%= recieverName %></b>,</p>
+        <p>
+            <b>Thank you for booking with us!</b>
+        </p>
+        <p>
+            <code>We have attached the invoice of your booking. Please keep it safe as it is your records.</code>
+        </p>
+    </main>
+    <footer>
+        <p>© 2025 Tour Management System. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

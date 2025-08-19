@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { envVars } from "../config/env"
-import { Role } from "../constant"
+import { IsActive, Role } from "../constant"
 import { AuthProviderI, UserI } from "../modules/user/user.interface"
 import { UserModel } from "../modules/user/user.model"
 import bcrypt from "bcryptjs"
@@ -28,7 +28,11 @@ export const seedSuperAdmin = async() => {
             password: hashedPassword,
             role: Role.SUPER_ADMIN,
             auth: [authProvider],
-            isVerified: true
+            isVerified: true,
+            isActive: IsActive.ACTIVE,
+            isDeleted: false,
+            phone: "01717171717",
+            address: "Bangladesh"
         } 
         const superAdmin = await UserModel.create(payload)
         console.log("Super Admin Created!", {superAdmin})
