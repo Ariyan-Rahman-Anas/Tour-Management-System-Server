@@ -7,8 +7,8 @@ import { BookingController } from "./booking.controller";
 
 const router = Router()
 
-router.post("/create", validateRequest(BookingCreateZodSchema), checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), BookingController.createBooking)
+router.post("/create", validateRequest(BookingCreateZodSchema), checkAuthorization(...Object.values(Role)), BookingController.createBooking)
 
-router.get("/", checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN, Role.USER, Role.GUIDE), BookingController.getAllBookings)
+router.get("/", checkAuthorization(...Object.values(Role)), BookingController.getAllBookings)
 
 export const BookingRoute = router
