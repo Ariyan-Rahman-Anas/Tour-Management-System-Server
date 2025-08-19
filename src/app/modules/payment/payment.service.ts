@@ -9,6 +9,7 @@ import { generatePDFInvoice, InvoiceDataI } from "../../utils/invoice"
 import { TourI } from "../tour/tour.interface"
 import { UserI } from "../user/user.interface"
 import { sendEmail } from "../../utils/sendEmail"
+import { cloudinaryUtils } from "../../config/cloudinary.config"
 
 const previousPaymentInit = async (id: string) => {
     const payment = await PaymentModel.findOne({ booking: id })
@@ -34,6 +35,19 @@ const previousPaymentInit = async (id: string) => {
     }
 }
 
+
+const getInvoice = async (id: string) => {
+    const payment = await PaymentModel.findById({ _id: id })
+    if (!payment) {
+        throw new AppError(httpStatus.NOT_FOUND, "Invoice not found!")
+    }
+    return {
+        invoice: payment.invoiceUrl
+    }
+}
+
+
+
 const onSuccessPayment = async (query: Record<string, string>) => {
     const session = await BookingModel.startSession()
     session.startTransaction()
@@ -57,6 +71,9 @@ const onSuccessPayment = async (query: Record<string, string>) => {
         }
 
         const pdfBuffer = await generatePDFInvoice(invoiceData)
+        const cloudinaryResult = await cloudinaryUtils.uploadBuffer(pdfBuffer, "Invoice")
+        await PaymentModel.findByIdAndUpdate(updatedPayment?._id, {invoiceUrl: cloudinaryResult?.secure_url}, {runValidators: true, session})
+        
         await sendEmail({
             to: (updatedBooking?.user as unknown as UserI).email,
             subject: "Booking Invoice",
@@ -145,6 +162,7 @@ const onCancelPayment = async (query: Record<string, string>) => {
 
 export const PaymentService = {
     previousPaymentInit,
+    getInvoice,
     onSuccessPayment,
     onFailPayment,
     onCancelPayment
