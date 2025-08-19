@@ -45,6 +45,9 @@ const resetPassword = async (oldPassword: string, newPassword: string, decodedTo
     if(newPassword?.length < 5){
         throw new AppError(httpStatus.BAD_REQUEST, "Password must be at least 5 characters long!")
     }
+    if (oldPassword === newPassword) {
+        throw new AppError(httpStatus.BAD_REQUEST, "New password should not be same as old password!")
+    }
     const user = await UserModel.findById(decodedToken.userId)
     const isOldPasswordMatched = await bcrypt.compare(oldPassword, user!.password as string)
     if (!isOldPasswordMatched) {
