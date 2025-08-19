@@ -32,7 +32,7 @@ export const generatePDFInvoice = async (invoiceData: InvoiceDataI): Promise<Buf
 
             doc.text(`Tour: ${invoiceData.tourName}`);
             doc.text(`Guests: ${invoiceData.guestCount}`);
-            doc.text(`Total Amount: $${invoiceData.totalAmount.toFixed(2)}`);
+            doc.text(`Total Amount: ${invoiceData.totalAmount.toFixed(2)}`);
             doc.moveDown();
 
             doc.text("Thank you for booking with us!", { align: "center" });
@@ -41,7 +41,6 @@ export const generatePDFInvoice = async (invoiceData: InvoiceDataI): Promise<Buf
         })
 
     } catch (error: any) {
-        console.log(error);
         throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, `Pdf creation error ${error.message}`)
     }
 }
