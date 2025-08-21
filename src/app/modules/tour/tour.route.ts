@@ -15,7 +15,7 @@ router.post("/create-tour-type",
     TourController.CreateTourType)
 
 router.get("/tour-types", 
-    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
+    // checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
     TourController.getAllTourTypes)
 
 router.patch("/tour-types/:id",
@@ -36,7 +36,7 @@ router.post("/create",
     TourController.createTour)
 
 router.get("/", 
-    checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
+    // checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), 
     TourController.getAllTours)
 
 router.get("/:slug", 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BOOKING_STATUS, PAYMENT_STATUS } from "../../constant"
 import AppError from "../../errorHelpers/appError"
 import { BookingModel } from "../booking/booking.model"

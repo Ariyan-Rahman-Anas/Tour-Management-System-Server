@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { v2 as cloudinary } from 'cloudinary';
 import { envVars } from './env';
 import { CloudinaryImage } from '../modules/tour/tour.interface';
@@ -35,7 +36,7 @@ const uploadBuffer = async (buffer: Buffer, fileName: string): Promise<Cloudinar
             public_id,
             folder:"PDF"
           },
-          (error, result) => {
+          (error, result:any) => {
             if (error) {
               reject(error)
             }

@@ -111,7 +111,6 @@ const getAllTours = catchAsync(async (req: Request, res: Response, next: NextFun
 })
 
 
-
 const getSingleTourBySlug = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const tour = await TourService.getSingleTourBySlug(req.params.slug)
     sendResponse(res, {
@@ -123,29 +122,20 @@ const getSingleTourBySlug = catchAsync(async (req: Request, res: Response, next:
 })
 
 
-// const updateTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-//     const tour = await TourService.updateTour(req.params.id, req.body)
-//     sendResponse(res, {
-//         statusCode: httpStatus.OK,
-//         success: true,
-//         message: "Tour Updated!",
-//         data: tour
-//     })
-// })
 const updateTour = catchAsync(async (req: Request, res: Response) => {
     const tour = await TourService.updateTour(
-      req.params.id,
-      req.body,
-      req.files as Express.Multer.File[]
+        req.params.id,
+        req.body,
+        req.files as Express.Multer.File[]
     );
-    
+
     sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Tour updated successfully",
-      data: tour
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Tour updated successfully",
+        data: tour
     });
-  });  
+});
 
 
 const deleteTour = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

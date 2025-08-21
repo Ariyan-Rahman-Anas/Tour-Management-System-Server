@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { PaymentService } from "./payment.service";
 import { envVars } from "../../config/env";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes"
+import { SSLCommerzService } from "../sslCommerz/sslCommerz.service";
 
 
 const previousPaymentInit = catchAsync(async(req:Request, res:Response, next:NextFunction)=>{
@@ -50,10 +53,24 @@ export const getInvoice = catchAsync(async (req, res, next) => {
 })
 
 
+export const validatePayment = catchAsync(async (req, res, next) => {
+    console.log("SLL Commerz IPN URL body: ", req. body)
+    await SSLCommerzService.validateSSLCommerzPayment(req.body)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Payment Validated!",
+        data: null
+    })
+})
+
+
 export const PaymentController = {
     previousPaymentInit,
     getInvoice,
     onSuccessPayment,
     onFailPayment,
     onCancelPayment,
+    validatePayment
 }

@@ -9,6 +9,8 @@ const router = Router()
 
 router.post("/create", validateRequest(BookingCreateZodSchema), checkAuthorization(...Object.values(Role)), BookingController.createBooking)
 
-router.get("/", checkAuthorization(...Object.values(Role)), BookingController.getAllBookings)
+router.get("/", checkAuthorization(Role.ADMIN, Role.SUPER_ADMIN), BookingController.getAllBookings)
+
+router.get("/:id", checkAuthorization(...Object.values(Role)), BookingController.getMyBookings)
 
 export const BookingRoute = router

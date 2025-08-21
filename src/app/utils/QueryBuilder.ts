@@ -14,6 +14,7 @@ export class QueryBuilder<T>{
         const filter = {...this.query}
 
         for(const field of excludeFields){
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete filter[field]
         }
 

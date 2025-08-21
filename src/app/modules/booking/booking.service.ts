@@ -18,7 +18,7 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
     if (!payload.tour) {
         throw new AppError(httpStatus.BAD_REQUEST, "Tour ID is required!")
     }
-    
+
     if (!payload.guestCount || payload.guestCount <= 0) {
         throw new AppError(httpStatus.BAD_REQUEST, "Valid guest count is required!")
     }
@@ -32,7 +32,7 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
         if (!user) {
             throw new AppError(httpStatus.NOT_FOUND, "User not found!")
         }
-        
+
         if (!user.phone || !user.address) {
             throw new AppError(httpStatus.BAD_REQUEST, "Please update your account info to book a tour!")
         }
@@ -42,7 +42,7 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
         if (!tour) {
             throw new AppError(httpStatus.NOT_FOUND, "Tour not found!")
         }
-        
+
         if (!tour.cost || tour.cost <= 0) {
             throw new AppError(httpStatus.BAD_REQUEST, "Invalid tour cost!")
         }
@@ -91,7 +91,7 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
             throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to update booking!")
         }
 
-        const sslPayload :SSLCommerzII = {
+        const sslPayload: SSLCommerzII = {
             amount: totalAmount,
             transactionId: createdPayment.transactionId,
             name: user.name,
@@ -104,7 +104,7 @@ const createBooking = async (payload: Partial<BookingI>, userId: string) => {
 
         await session.commitTransaction()
         session.endSession()
-        
+
         return {
             booking: updatedBooking,
             paymentUrl: paymentInit?.GatewayPageURL,
@@ -139,10 +139,17 @@ const getAllBookings = async (query: Record<string, string>) => {
 }
 
 
-const getMyBookings =async ()=>{}
+const getMyBookings = async (userId: string) => {
+    const bookings = await BookingModel.find({ user: userId })
+    if (bookings?.length < 1) {
+        throw new AppError(httpStatus.NOT_FOUND, "No bookings found!")
+    }
+    return bookings
+}
 
 
 export const BookingService = {
     createBooking,
-    getAllBookings
+    getAllBookings,
+    getMyBookings
 }
