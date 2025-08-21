@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createClient } from 'redis';
 import { envVars } from './env';
 
@@ -18,7 +19,3 @@ export const connectRedis = async()=>{
         console.log("Redis connected!")
     }
 }
-
-// await redisClient.set('foo', 'bar');
-// const result = await redisClient.get('foo');
-// console.log(result)  // >>> bar

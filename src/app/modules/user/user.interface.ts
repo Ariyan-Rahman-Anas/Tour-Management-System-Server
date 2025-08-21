@@ -21,4 +21,5 @@ export interface UserI {
     auth: AuthProviderI[]
     booking?: Types.ObjectId[]
     guides?: Types.ObjectId[]
+    createdAt?: Date
 }

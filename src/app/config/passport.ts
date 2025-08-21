@@ -6,8 +6,6 @@ import { envVars } from "./env";
 import { UserModel } from "../modules/user/user.model";
 import bcrypt from "bcryptjs"
 import { Role } from "../constant";
-import AppError from "../errorHelpers/appError";
-import httpStatus from "http-status-codes"
 import { IsActive } from "../constant";
 
 

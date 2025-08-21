@@ -10,5 +10,6 @@ router.post("/fail", PaymentController.onFailPayment)
 router.post("/cancel", PaymentController.onCancelPayment)
 router.post("/payment-init/:id", PaymentController.previousPaymentInit)
 router.get("/invoice/:id", checkAuthorization(...Object.values(Role)), PaymentController.getInvoice)
+router.get("/validate-payment", PaymentController.validatePayment )
 
 export const PaymentRoute = router

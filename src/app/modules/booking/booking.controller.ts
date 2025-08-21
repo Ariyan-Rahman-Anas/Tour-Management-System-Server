@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { BookingService } from "./booking.service";
@@ -18,7 +19,7 @@ const createBooking = catchAsync(async (req: Request, res: Response, next: NextF
 
 
 const getAllBookings = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {bookings, total, page, limit, totalPages} = await BookingService.getAllBookings(req.query as Record<string, string>)
+    const { bookings, total, page, limit, totalPages } = await BookingService.getAllBookings(req.query as Record<string, string>)
     sendResponse(res, {
          statusCode: httpStatus.OK,
         success: true,
@@ -33,7 +34,21 @@ const getAllBookings = catchAsync(async (req: Request, res: Response, next: Next
     })
 })
 
+
+const getMyBookings = catchAsync(async (req, res, next) => {
+    const bookings = await BookingService.getMyBookings(req.params.id)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Bookings Retrieved!",
+        data: bookings
+    })
+})
+
+
 export const BookingController = {
     createBooking,
-    getAllBookings
+    getAllBookings,
+    getMyBookings
 }

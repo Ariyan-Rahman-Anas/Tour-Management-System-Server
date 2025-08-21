@@ -5,6 +5,7 @@ import { QueryBuilder } from "../../utils/QueryBuilder"
 import httpStatus from "http-status-codes"
 import AppError from "../../errorHelpers/appError"
 import { cloudinaryUtils } from "../../config/cloudinary.config"
+import { DivisionModel } from "../division/division.model"
 
 // tour type
 const CreateTourType = async (payload: Partial<TourTypeI>) => {
@@ -37,13 +38,20 @@ const createTour = async (payload: Partial<TourI>, files?: Express.Multer.File[]
     if (isDuplicate) {
         throw new AppError(httpStatus.BAD_REQUEST, 'Tour already exists!');
     }
+    const isDivisionExist = await DivisionModel.findById({ _id: payload.division })
+    if (!isDivisionExist) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'Division does not exist!');
+    }
+    const isTourTypeExist = await TourTypeModel.findById({ _id: payload.tourType })
+    if (!isTourTypeExist) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'Tour type does not exist!');
+    }
 
     // Upload images if provided
     if (files && files.length > 0) {
         const uploadPromises = files.map(file =>
             cloudinaryUtils.uploadFile(file, FOLDER_NAME)
         );
-        console.log("Upload promises", uploadPromises)
         payload.images = await Promise.all(uploadPromises);
     }
 
@@ -53,7 +61,6 @@ const createTour = async (payload: Partial<TourI>, files?: Express.Multer.File[]
 
 
 const getAllTours = async (query: Record<string, string>) => {
-
     const queryBuilder = new QueryBuilder(TourModel.find(), query)
     const tours = await queryBuilder
         .search(searchableFields)

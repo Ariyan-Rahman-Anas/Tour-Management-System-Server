@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import PDFDocument from "pdfkit";
 import AppError from "../errorHelpers/appError";
 import httpStatus from "http-status-codes";
